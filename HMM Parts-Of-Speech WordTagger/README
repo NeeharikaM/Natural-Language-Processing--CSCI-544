@@ -1,0 +1,48 @@
+In this assignment you will write a Hidden Markov Model part-of-speech tagger for English, Chinese, and a surprise language. 
+The training data are provided tokenized and tagged; the test data will be provided tokenized, and your tagger will add the 
+tags. The assignment will be graded based on the performance of your tagger, that is how well it performs on unseen test data compared to the performance of a reference tagger.
+
+Data
+A set of training and development data will be made available. The uncompressed archive will have the following files:
+
+Two files (one English, one Chinese) with tagged training data in the word/TAG format, with words separated by spaces and each sentence on a new line.
+Two files (one English, one Chinese) with untagged development data, with words separated by spaces and each sentence on a new line.
+Two files (one English, one Chinese) with tagged development data in the word/TAG format, with words separated by spaces and each sentence on a new line, to serve as an answer key.
+
+Programs
+You will write two programs: hmmlearn.py will learn a hidden Markov model from the training data, and hmmdecode.py will use 
+the model to tag new data.
+The learning program will be invoked in the following way:
+
+> python hmmlearn.py /path/to/input
+
+The argument is a single file containing the training data; the program will learn a hidden Markov model, and write the model 
+parameters to a file called hmmmodel.txt.
+The tagging program will be invoked in the following way:
+
+> python hmmdecode.py /path/to/input
+
+The argument is a single file containing the test data; the program will read the parameters of a hidden Markov model from the
+file hmmmodel.txt, tag each word in the test data, and write the results to a text file called hmmoutput.txt in the same format as the training data.
+
+Tags. Each language has a different tagset; the surprise language will have some tags that do not exist in the English and 
+Chinese data. You must therefore build your tag sets from the training data, and not rely on a precompiled list of tags.
+
+Slash character. The slash character ‘/’ is the separator between words and tags, but it also appears within words in the 
+text, so be very careful when separating words from tags. Slashes never appear in the tags, so the separator is always the last slash in the word/tag sequence.
+
+Smoothing and unseen words and transitions. You should implement some method to handle unknown vocabulary and unseen 
+transitions in the test data, otherwise your programs won’t work.
+
+Unseen words: The test data may contain words that have never been encountered in the training data: these will have an 
+emission probability of zero for all tags.
+
+Unseen transitions: The test data may contain two adjacent unambiguous words (that is, words that can only have one 
+part-of-speech tag), but the transition between these tags was never seen in the training data, so it has a probability of 
+zero; in this case the Viterbi algorithm will have no way to proceed.
+The reference solution will use add-one smoothing on the transition probabilities and no smoothing on the emission 
+probabilities; for unknown tokens in the test data it will ignore the emission probabilities and use the transition 
+probabilities alone. You may use more sophisticated methods which you implement yourselves.
+End state. You may choose to implement the algorithm with transitions to an end state at the end of a sentence 
+(as in Jurafsky and Martin, figure 9.11), or without an end state (as in the written homework assignment). The reference 
+solution will use an end state.
